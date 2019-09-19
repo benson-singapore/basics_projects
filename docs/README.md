@@ -11,3 +11,4 @@
 - [Guava](https://www.yiibai.com/guava) Google java核心库
 - [FastJson](https://github.com/valyala/fastjson) 阿里JSON开源包
 - [JSOUP](https://jsoup.org/) Html解析基于jquery版的解析工具
+- [Swagger](https://swagger.io/) API文档工具
