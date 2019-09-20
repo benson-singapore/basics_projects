@@ -401,7 +401,7 @@ public class GraspCorn {
 spring:
   # redis config
   redis:
-    host: 47.244.25.34
+    host: *****
     port: 6379
     password:
     database: 1
@@ -581,4 +581,151 @@ public class IRedisService {
         }
     }
 }
+```
+
+## SpringBoot RabbitMQ配置
+> 增加rabbitMQ配置
+
+- 添加Maven配置
+``` xml
+<!--rabbitmq-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+```
+
+- yml 系统配置
+``` yaml
+  spring:
+  # rabbitMq config
+    rabbitmq:
+      host: *****
+      port: 5672
+      username: guest
+      password: guest
+      publisher-confirms: true # Whether to enable publisher confirms.
+      virtual-host: / # Virtual host to use when connecting to the broker.
+      listener:
+        simple:
+          concurrency: 1 # Minimum number of listener invoker threads.
+          max-concurrency: 1 # Maximum number of listener invoker threads.
+          prefetch: 1 # Maximum number of unacknowledged messages that can be outstanding at each consumer.
+```
+
+- rabbitMQ系统配置
+
+``` java
+import com.way.pacific.common.constants.Constants;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+
+/**
+ * rabbit config
+ *
+ * @author zhangby
+ * @date 2019-05-16 09:51
+ */
+@Configuration
+public class RabbitMqConfig {
+
+    /**
+     * Create a log message queue
+     *
+     * @return
+     */
+    @Bean
+    public Queue loggerQueue() {
+        /** Create permanent queue data and still save after reboot */
+        return new Queue(Constants.QUEUE_SYS_LOG, true);
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(new Jackson2JsonMessageConverter());
+        return template;
+    }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+        return factory;
+    }
+
+}
+```
+
+- 添加rabbitMQ监听
+
+``` java
+import java.io.IOException;
+
+/**
+ * mq for Log
+ *
+ * @author zhangby
+ * @date 2019-05-16 09:48
+ */
+@Component
+public class LogReceiver {
+
+    /**
+     * receiver rabbitMq msg
+     *
+     * @param data    data
+     * @param channel channel
+     * @param message message
+     * @throws IOException ioException
+     */
+    @RabbitHandler
+    @Transactional(rollbackFor = Exception.class)
+    @RabbitListener(queues = "queue.sys.log", containerFactory = "rabbitListenerContainerFactory")
+    public void receiver(@Payload String data, Channel channel, Message message) throws IOException {
+        try {
+            Log logException = JSON.parseObject(data, Log.class);
+            logException.insert();
+        } catch (Exception e) {
+            //The MQ has been accepted and consumed, and will not be repeated for consumption.
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            //Manual rollback
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+
+}
+```
+
+- java 调用rabbitMQ
+
+``` java
+    //引入
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
+    //调用
+    Log log = new Log()
+            .setId(IdUtil.simpleUUID())
+            .setType("1")
+            .setTitle("系统异常日志信息")
+            .setCreateBy(UserUtil.getCurrentUser().getId())
+            .setCreateDate(new Date())
+            .setRemoteAddr(ServletUtil.getClientIP(request))
+            .setRequestUri(CommonUtil.notEmpty(request, r -> r.getRequestURL().toString()))
+            .setMethod(CommonUtil.notEmpty(request, r -> r.getMethod()))
+            .setParams(JSON.toJSONString(ServletUtil.getParams(request)))
+            .setException(CommonUtil.getExceptionMsg(exception));
+    //send MQ
+    rabbitTemplate.convertAndSend(
+            Constants.QUEUE_SYS_LOG,
+            JSON.toJSONString(log)
 ```
