@@ -6,5 +6,6 @@
 
 #### 参考文档地址：
 
-gitee地址：[http://regan_jeff.gitee.io/benson_projects](http://regan_jeff.gitee.io/benson_projects)
-gitlabe地址：[https://zhangbiyu.gitlab.io/basics_project ](https://zhangbiyu.gitlab.io/basics_project )
+`gitee`地址：[http://regan_jeff.gitee.io/benson_projects](http://regan_jeff.gitee.io/benson_projects)
+
+`gitlabe`地址：[https://zhangbiyu.gitlab.io/basics_project ](https://zhangbiyu.gitlab.io/basics_project )
