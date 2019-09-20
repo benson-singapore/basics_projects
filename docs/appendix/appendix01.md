@@ -1,7 +1,6 @@
 # 附录 I
 
-## 常用书籍收藏 📚
-> 日常收集的书籍整理
+> 常用书籍收藏 📚
 
 #### java
 - [Thinking in Java (Java 编程思想)](http://blog.didispace.com/books/think-in-java/)

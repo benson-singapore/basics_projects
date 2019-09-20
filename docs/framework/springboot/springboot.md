@@ -382,3 +382,203 @@ public class GraspCorn {
     }
 }
 ```
+
+## SpringBoot Redis配置
+
+> Springboot 内置了Redis模块可以直接使用，这里对redis进行了一些简单的封装，优化了存取json的转换。
+
+- 引入maven配置
+``` xml
+<!--redis-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+```
+
+- 增加系统配置文件
+``` yaml
+spring:
+  # redis config
+  redis:
+    host: 47.244.25.34
+    port: 6379
+    password:
+    database: 1
+    timeout: 5000
+    jedis:
+      pool:
+        max-active: 1
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+```
+
+- 添加Service方法
+
+``` java
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * redis service
+ *
+ * @author zhangby
+ * @date 2019-05-15 09:34
+ */
+@Service
+public class IRedisService {
+    /**
+     * logger
+     */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    /**
+     * redis service
+     */
+    @Autowired
+    protected StringRedisTemplate redisTemplate;
+
+    /**
+     * Write to redis cache
+     *
+     * @param key key
+     * @param value value
+     * @return boolean
+     */
+    public boolean set(final String key, Object value) {
+        boolean result = false;
+        if (value != null) {
+            try {
+                ValueOperations operations = redisTemplate.opsForValue();
+                if (value instanceof String) {
+                    operations.set(key, value.toString());
+                } else {
+                    operations.set(key, JSON.toJSONString(value));
+                }
+                result = true;
+            } catch (Exception e) {
+                logger.info("Writing redis cache failed! The error message is:" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Write redis cache (set expire survival time)
+     *
+     * @param key key
+     * @param value value
+     * @param expire time
+     * @return boolean
+     */
+    public boolean set(final String key, Object value, Long expire) {
+        boolean result = false;
+        try {
+            ValueOperations operations = redisTemplate.opsForValue();
+            if (value instanceof String) {
+                operations.set(key, value.toString());
+            } else {
+                operations.set(key, JSON.toJSONString(value));
+            }
+            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+            result = true;
+        } catch (Exception e) {
+            logger.info("Writing to the redis cache (setting the expire lifetime) failed! The error message is:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    /**
+     * Read redis cache
+     *
+     * @param key key
+     * @return object
+     */
+    public Object get(final String key) {
+        Object result = null;
+        try {
+            ValueOperations operations = redisTemplate.opsForValue();
+            result = operations.get(key);
+        } catch (Exception e) {
+            logger.info("Failed to read redis cache! The error message is:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Read redis to entity
+     *
+     * @param key   redis key
+     * @param clazz 实体类class
+     * @param <T>   泛型
+     * @return T
+     */
+    public <T> T getBean(final String key, Class<T> clazz) {
+        return Optional.ofNullable(get(key))
+                .map(o -> JSON.parseObject(o.toString(), clazz))
+                .orElse(null);
+    }
+
+
+    /**
+     * Determine if there is a corresponding key in the redis cache
+     *
+     * @param key key
+     * @return boolean
+     */
+    public boolean exists(final String key) {
+        boolean result = false;
+        try {
+            result = redisTemplate.hasKey(key);
+        } catch (Exception e) {
+           logger.info("Determine if there is a corresponding key in the redis cache failed! The error message is:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Redis deletes the corresponding value according to the key
+     *
+     * @param key key
+     * @return boolean
+     */
+    public boolean remove(final String key) {
+        boolean result = false;
+        try {
+            if (exists(key)) {
+                redisTemplate.delete(key);
+            }
+            result = true;
+        } catch (Exception e) {
+            logger.info("Redis fails to delete the corresponding value according to the key! The error message is:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Redis deletes the corresponding value according to the keywords batch
+     *
+     * @param keys keys
+     */
+    public void remove(final String... keys) {
+        for (String key : keys) {
+            remove(key);
+        }
+    }
+}
+```

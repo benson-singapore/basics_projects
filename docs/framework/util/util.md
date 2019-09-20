@@ -68,13 +68,6 @@ public class EmailUtil {
     /**
      * 发送邮件
      */
-    public static void send(String content) {
-        send("Grasp 爬虫异常", content);
-    }
-
-    /**
-     * 发送邮件
-     */
     public static void send(String title, String content) {
         try {
             emailConfig.getTo().forEach(toEmail -> {
