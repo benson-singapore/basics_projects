@@ -1,0 +1,16 @@
+package com.benson.spring.mybatisplus;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class MybatisPlusSpringbootApplicationTests {
+
+    @Test
+    public void contextLoads() {
+    }
+
+}
