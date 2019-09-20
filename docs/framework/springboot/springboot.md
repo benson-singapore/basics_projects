@@ -2,6 +2,8 @@
 
 > Springboot 日常笔记
 
+![](./images/spring.png ':size=400')
+
 ## Springboot 读取系统配置文件
 
 > springboot 配置文件，默认支持properties，yml 所以两者通用

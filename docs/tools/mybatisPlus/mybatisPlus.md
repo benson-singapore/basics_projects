@@ -2,6 +2,8 @@
 
 > " `MyBatis-Plus`（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。" <br> --—— 摘自官网 [MyBatis-Plus](https://mybatis.plus/)
 
+![](./images/logo.png ':size=200')
+
 ### 特征
 
 - **无侵入**：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑
@@ -66,6 +68,10 @@ spring:
     username: root
     password: *****
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  ### mybatis-plus config ###
+  mybatis-plus:
+    mapper-locations: classpath*:mapper/*.xml
 ```
 
 #### 3. 添加代码生成
@@ -262,4 +268,50 @@ public class MybatisPlusSpringbootApplication {
 }
 ```
 
-?> 代码参考地址：[mybatis-plus-springboot](https://gitee.com/regan_jeff/benson_projects/tree/master/projects/mybatis-plus-springboot)
+!> 代码参考地址：[mybatis-plus-springboot](https://gitee.com/regan_jeff/benson_projects/tree/master/projects/mybatis-plus-springboot)
+
+
+### SpringBoot 分页处理
+
+``` java
+//Spring boot方式
+@EnableTransactionManagement
+@Configuration
+public class MybatisPlusConfig {
+
+    /**
+     * 分页插件
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        // paginationInterceptor.setLimit(你的最大单页限制数量，默认 500 条，小于 0 如 -1 不受限制);
+        return paginationInterceptor;
+    }
+}
+```
+
+### CRUD 接口
+
+?> MyBatisPlus CRUD接口 参考官网文档 [CRUD接口](https://mybatis.plus/guide/crud-interface.html)
+
+### 条件构造器
+
+?> MyBatisPlus 条件构造器 参考官网文档 [条件构造器](https://mybatis.plus/guide/wrapper.html)
+
+### 逻辑删除
+?> MyBatisPlus 逻辑删除 参考官网文档 [逻辑删除](https://mybatis.plus/guide/logic-delete.html)
+
+### sql打印
+
+- 增加sql打印配置
+
+``` yaml
+### mybatis-plus config ###
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+```
+
+### 动态数据源
+?> MyBatisPlus 动态数据源 参考官网文档 [动态数据源](https://mybatis.plus/guide/dynamic-datasource.html)

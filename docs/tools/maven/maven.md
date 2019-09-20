@@ -2,6 +2,8 @@
 
 > 记录一些maven遇到的问题
 
+![](./images/maven.png ':size=400')
+
 ## Springboot 多环境打包
 > 基于springboot多环境打包问题，可根据springboot多环境配置文件一起使用
 
