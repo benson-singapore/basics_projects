@@ -206,4 +206,60 @@ INSERT INTO user (id, name, age, email) VALUES
 (5, 'Billie', 24, 'test5@baomidou.com');
 ```
 
-?> 代码参考地址：
+#### 5. 调用代码生成器
+> 执行 main方法，生成 user表数据。生成 controller service dao controller 新增查询接口
+
+``` java
+  /**
+   * <p>
+   *  前端控制器
+   * </p>
+   *
+   * @author zhangbiyu
+   * @since 2019-09-20
+   */
+  @RestController
+  @RequestMapping("/user")
+  public class UserController {
+
+      @Autowired
+      IUserService userService;
+
+      /**
+       * 查询用户
+       * @return
+       */
+      @GetMapping("")
+      public List<User> getUserList() {
+          return userService.list();
+      }
+
+      @GetMapping("/{id}")
+      public User getUserById(@PathVariable("id") String id) {
+          return userService.getById(id);
+      }
+  }
+
+```
+
+#### 6. 增加dao扫描配置
+
+``` java
+/**
+ * 主方法
+ *
+ * @author zhangby
+ * @date 20/9/19 2:58 pm
+ */
+@SpringBootApplication
+@MapperScan("com.benson.spring.mybatisplus.mapper")
+public class MybatisPlusSpringbootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MybatisPlusSpringbootApplication.class, args);
+    }
+
+}
+```
+
+?> 代码参考地址：[mybatis-plus-springboot](https://gitee.com/regan_jeff/benson_projects/tree/master/projects/mybatis-plus-springboot)
