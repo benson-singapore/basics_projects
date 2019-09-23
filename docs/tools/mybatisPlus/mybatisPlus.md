@@ -2,7 +2,7 @@
 
 > " `MyBatis-Plus`（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。" <br> --—— 摘自官网 [MyBatis-Plus](https://mybatis.plus/)
 
-![](./images/logo.png ':size=200')
+![](./images/logo.png ':size=200') <span style="position: relative; top: -32px;font-size: 40px; font-weight: 600; color: #2196f3;">Mybatis-Plus</span>
 
 - [特征](/tools/mybatisPlus/mybatisPlus?id=特征)
 - [springboot-安装](/tools/mybatisPlus/mybatisPlus?id=springboot-安装)
@@ -283,7 +283,7 @@ public class MybatisPlusSpringbootApplication {
 }
 ```
 
-!> 代码参考地址：[mybatis-plus-springboot](https://gitee.com/regan_jeff/benson_projects/tree/master/projects/mybatis-plus-springboot)
+!> 代码参考地址：[mybatis-plus-springboot](https://github.com/zhangbiy/basics_projects/tree/master/projects/mybatis-plus-springboot)
 
 
 ### SpringBoot 分页处理

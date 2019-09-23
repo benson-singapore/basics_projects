@@ -1,5 +1,7 @@
 <h1 align="center" style="font-size:45px">Basics Projects</h1>
-<p align="center"><img src="./images/Business solutions .png"></img></p>
+<p align="center">
+  <img src="./images/Business solutions .png"  class="no-zoom" />
+</p>
 
 #### 介绍
 
@@ -18,6 +20,9 @@
     - [springboot-redis配置](/framework/springboot/springboot?id=springboot-redis配置)
     - [springboot-rabbitmq配置](/framework/springboot/springboot?id=springboot-rabbitmq配置)
     - [springboot-日志追踪](/framework/springboot/springboot?id=springboot-日志追踪)
+  - [SpringCloud](/framework/springcloud/springcloud)
+    - [springcloud-简介](/framework/springcloud/springcloud?id=springcloud-简介)
+    - [springcloud-eureka](/framework/springcloud/springcloud?id=springcloud-eureka)
   - [Utils 工具类](/framework/util/util)
     - [springboot-邮件发送](/framework/util/util?id=springboot-邮件发送)
     - [spring容器中获取静态对象](/framework/util/util?id=spring容器中获取静态对象)

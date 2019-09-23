@@ -2,7 +2,7 @@
 
 > Springboot 日常笔记
 
-![](./images/spring.png ':size=400')
+![](./images/spring.png ':size=400') <span style="position: relative; top: -34px; font-size:65px; font-weight: 600; color: #55b432;">Boot</span>
 
 
 - [springboot-读取系统配置文件](/framework/springboot/springboot?id=springboot-读取系统配置文件)

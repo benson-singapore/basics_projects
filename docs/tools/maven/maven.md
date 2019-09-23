@@ -2,7 +2,7 @@
 
 > 记录一些maven遇到的问题
 
-![](./images/maven.png ':size=400')
+![](https://maven.apache.org/images/maven-logo-black-on-white.png ':size=250')
 
 - [springboot-多环境打包](/tools/maven/maven?id=springboot-多环境打包)
 - [maven-引入本地项目jar包](/tools/maven/maven?id=maven-引入本地项目jar包)
@@ -75,7 +75,7 @@ mvn clean package -dev
 ```
 > IDEA 配置
 
-![](./images/WX20190919-161241@2x.png ':size=500')
+![](./images/WX20190919-161241@2x.png ':size=600')
 
 
 ## Maven 引入本地项目jar包
