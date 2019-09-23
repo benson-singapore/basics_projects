@@ -9,4 +9,4 @@
 [Github](https://github.com/zhangbiy/basics_projects)
 [GitLab](https://gitlab.com/zhangbiyu/basics_project)
 [Gitee](https://gitee.com/regan_jeff/benson_projects)
-[Get Started](/README)
+[Get Started](#top)

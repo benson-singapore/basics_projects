@@ -1,3 +1,4 @@
+<span id="top"></span>
 <h1 align="center" style="font-size:45px">Basics Projects</h1>
 <p align="center">
   <img src="./images/Business solutions .png"  class="no-zoom" />
@@ -10,7 +11,7 @@
 #### 目录
 
 
-- [前言](/)
+- [前言](/top)
 - [框架](/framework/springboot/springboot)
   - [SpringBoot](/framework/springboot/springboot)
     - [springboot-读取系统配置文件](/framework/springboot/springboot?id=springboot-读取系统配置文件)
