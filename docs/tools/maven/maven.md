@@ -4,6 +4,9 @@
 
 ![](./images/maven.png ':size=400')
 
+- [springboot-多环境打包](/tools/maven/maven?id=springboot-多环境打包)
+- [maven-引入本地项目jar包](/tools/maven/maven?id=maven-引入本地项目jar包)
+
 ## Springboot 多环境打包
 > 基于springboot多环境打包问题，可根据springboot多环境配置文件一起使用
 

@@ -2,6 +2,11 @@
 
 > 日常封装用到的工具类
 
+- [springboot-邮件发送](/framework/util/util?id=springboot-邮件发送)
+- [spring容器中获取静态对象](/framework/util/util?id=spring容器中获取静态对象)
+- [获取setting-公共配置文件](/framework/util/util?id=获取setting-公共配置文件)
+- [commonutil-公共通用方法](/framework/util/util?id=commonutil-公共通用方法)
+
 ## SpringBoot 邮件发送
 
 ##### 1. 添加maven

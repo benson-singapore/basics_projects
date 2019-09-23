@@ -4,6 +4,21 @@
 
 ![](./images/logo.png ':size=200')
 
+- [特征](/tools/mybatisPlus/mybatisPlus?id=特征)
+- [springboot-安装](/tools/mybatisPlus/mybatisPlus?id=springboot-安装)
+  - [1-添加依赖](/tools/mybatisPlus/mybatisPlus?id=_1-添加依赖)
+  - [2-添加系统配置信息](/tools/mybatisPlus/mybatisPlus?id=_2-添加系统配置信息)
+  - [3-添加代码生成](/tools/mybatisPlus/mybatisPlus?id=_3-添加代码生成)
+  - [4-添加数据信息](/tools/mybatisPlus/mybatisPlus?id=_4-添加数据信息)
+  - [5-调用代码生成器](/tools/mybatisPlus/mybatisPlus?id=_5-调用代码生成器)
+  - [6-增加dao扫描配置](/tools/mybatisPlus/mybatisPlus?id=_6-增加dao扫描配置)
+- [springboot-分页处理](/tools/mybatisPlus/mybatisPlus?id=springboot-分页处理)
+- [crud-接口](/tools/mybatisPlus/mybatisPlus?id=crud-接口)
+- [条件构造器](/tools/mybatisPlus/mybatisPlus?id=条件构造器)
+- [逻辑删除](/tools/mybatisPlus/mybatisPlus?id=逻辑删除)
+- [sql打印](/tools/mybatisPlus/mybatisPlus?id=sql打印)
+- [动态数据源](/tools/mybatisPlus/mybatisPlus?id=动态数据源)
+
 ### 特征
 
 - **无侵入**：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑

@@ -2,6 +2,18 @@
 
 ![](./images/swagger_logo.png ':size=400')
 
+- [1. swagger 安装](/tools/swagger/swagger?id=_1-swagger-安装)
+  - [1.1-介绍](/tools/swagger/swagger?id=_11-介绍)
+  - [1.2-springboot-集成-swagger](/tools/swagger/swagger?id=_12-springboot-集成-swagger)
+- [2-swagger-注解](/tools/swagger/swagger?id=_2-swagger-注解)
+  - [@api：用在请求的类上，说明该类的作用](/tools/swagger/swagger?id=api：用在请求的类上，说明该类的作用)
+  - [@apioperation：用在请求的方法上，说明方法的作用](/tools/swagger/swagger?id=apioperation：用在请求的方法上，说明方法的作用)
+  - [@apiimplicitparams：用在请求的方法上，包含一组参数说明](/tools/swagger/swagger?id=apiimplicitparams：用在请求的方法上，包含一组参数说明)
+  - [@apiresponses：用于请求的方法上，表示一组响应](/tools/swagger/swagger?id=apiresponses：用于请求的方法上，表示一组响应)
+  - [@apimodel：用于响应类上，表示一个返回响应数据的信息](/tools/swagger/swagger?id=apimodel：用于响应类上，表示一个返回响应数据的信息)
+- [3-oauth20授权配置](/tools/swagger/swagger?id=_3-oauth20授权配置)
+- [4-springcloud-多项目管理](/tools/swagger/swagger?id=_4-springcloud-多项目管理)
+
 ### 1. swagger 安装
 
 #### 1.1 介绍
