@@ -11,6 +11,7 @@
 - [springboot-多线程定时任务](/framework/springboot/springboot?id=springboot-多线程定时任务)
 - [springboot-redis配置](/framework/springboot/springboot?id=springboot-redis配置)
 - [springboot-rabbitmq配置](/framework/springboot/springboot?id=springboot-rabbitmq配置)
+- [springboot-日志追踪](/framework/springboot/springboot?id=springboot-日志追踪)
 
 ## Springboot 读取系统配置文件
 
@@ -739,3 +740,37 @@ public class LogReceiver {
             Constants.QUEUE_SYS_LOG,
             JSON.toJSONString(log)
 ```
+
+## SpringBoot 日志追踪
+
+> 此处springboot日志追踪是借助于springcloud的一个组件Sleuth，利用组件在日志里打印TraceId，并根据TraceId追踪到日志记录。
+
+- 添加依赖
+
+``` xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-sleuth</artifactId>
+    <version>2.1.2.RELEASE</version>
+</dependency>
+```
+
+- 增加logback日志
+> 详情请参考 [springboot-自定义日志](/framework/springboot/springboot?id=springboot-自定义日志)
+
+``` xml
+  [%X{X-B3-TraceId:-}]
+```
+
+- java 代码里获取TraceId
+
+``` java
+   @Autowired
+   private Tracer tracer;
+
+   //调用
+   String tracerId = tracer.currentSpan().context().toString();
+```
+
+!> 具体如果使用日志追踪还需要根据业务来，我这里有一套追踪机制是：<br>
+  系统出异常捕获，然后发送邮件到指定邮箱并带上`tracerId`，之后系统维护人员可根据`tracerId`定位到日志请求过程中所有的日志情况，然后处理。

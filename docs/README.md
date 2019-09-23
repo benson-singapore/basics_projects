@@ -17,6 +17,7 @@
     - [springboot-多线程定时任务](/framework/springboot/springboot?id=springboot-多线程定时任务)
     - [springboot-redis配置](/framework/springboot/springboot?id=springboot-redis配置)
     - [springboot-rabbitmq配置](/framework/springboot/springboot?id=springboot-rabbitmq配置)
+    - [springboot-日志追踪](/framework/springboot/springboot?id=springboot-日志追踪)
   - [Utils 工具类](/framework/util/util)
     - [springboot-邮件发送](/framework/util/util?id=springboot-邮件发送)
     - [spring容器中获取静态对象](/framework/util/util?id=spring容器中获取静态对象)
