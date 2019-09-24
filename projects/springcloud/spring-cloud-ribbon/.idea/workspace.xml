@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f483f931-f79c-45b0-8472-40968cb602ce" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client-service-two/src/main/java/com/basics/clientservicetwo/controller/ClientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../docs/framework/springcloud/springcloud.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../docs/framework/springcloud/springcloud.md" afterDir="false" />
-    </list>
+    <list default="true" id="f483f931-f79c-45b0-8472-40968cb602ce" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +97,7 @@
       <option name="presentableId" value="Default" />
       <updated>1569304140963</updated>
       <workItem from="1569304144590" duration="23000" />
-      <workItem from="1569304188466" duration="1846000" />
+      <workItem from="1569304188466" duration="3179000" />
     </task>
     <servers />
   </component>
