@@ -3,11 +3,11 @@
 
 ![](./images/SPRINGCLOUD.png ':size=170px') <span style="position: relative; top: -10px; font-size:20px; font-weight: 600; color: #55b432;">Spring Cloud</span>
 
-- [springcloud-简介](/framework/springcloud/springcloud?id=springcloud-简介)
-- [springcloud-eureka](/framework/springcloud/springcloud?id=springcloud-eureka)
-- [springcloud-ribbon](/framework/springcloud/springcloud?id=springcloud-ribbon)
+- [springcloud-简介](/framework/springcloud/springcloud?id=springcloud)
+- [springcloud-eureka](/framework/springcloud/docs/eureka)
+- [springcloud-ribbon](/framework/springcloud/docs/ribbon)
 
-### SpringCloud-简介
+##### SpringCloud-简介
 
 SpringCloud是一个基千SpringBoot实现的微服务架构开发 工具。 它为微服务架构中 涉及的 配置管理、 服务治理、 断路器、 智能路由、 微代理、 控制总线、 全局锁、 决策竞选、 分布式会话和集群状态管理等操作提供了 一 种简单的开发方式。
 
@@ -28,9 +28,6 @@ SpringCloud是一个基千SpringBoot实现的微服务架构开发 工具。 它
 |  Pipeline  | spring-cloud-pipelines | 部署管道  |
 |  Dataflow  | spring-cloud-dataflow | 数据处理  |
 
+##### 示例代码
 
-### SpringCloud-Eureka
-[eureka](./docs/eureka.md ':include')
-
-### SpringCloud-Ribbon
-[eureka](./docs/ribbon.md ':include')
+!> 代码参考地址：[spring-cloud](https://github.com/zhangbiy/basics_projects/tree/master/projects/springcloud)
