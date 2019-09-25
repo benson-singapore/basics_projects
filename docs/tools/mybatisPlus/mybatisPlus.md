@@ -283,12 +283,40 @@ public class MybatisPlusSpringbootApplication {
 }
 ```
 
+#### 7. 示例代码
 !> 代码参考地址：[mybatis-plus-springboot](https://github.com/zhangbiy/basics_projects/tree/master/projects/mybatis-plus-springboot)
 
-> MyBatisPlus 如何集成 Oracle
-``` yaml
-spring
+#### 8. MyBatisPlus 集成 Oracle
+> MyBatisPlus 如何集成 Oracle，修改如上[MyBatisPlus集成springboot](/tools/mybatisPlus/mybatisPlus?id=_8-mybatisplus-如何集成-oracle)代码，增加oracle配置
+- 增加依赖
+```xml
+<dependency>
+   <groupId>com.oracle.jdbc</groupId>
+   <artifactId>ojdbc6</artifactId>
+   <version>11.2.0.3</version>
+   <scope>system</scope>
+   <systemPath>${basedir}/src/main/resources/lib/ojdbc6-11.2.0.3.jar</systemPath>
+</dependency>
 ```
+- 修改配置信息
+```properties
+spring.datasource.driver-class-name= oracle.jdbc.driver.OracleDriver
+spring.datasource.url= jdbc:oracle:thin:@******:1521:ddata
+spring.datasource.username= ddata
+spring.datasource.password= ******
+```
+- 修改代码生成器 数据配置
+```java
+  // 数据源配置
+  DataSourceConfig dsc = new DataSourceConfig();
+  dsc.setUrl("jdbc:oracle:thin:@******:1521:ddata");
+  dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
+  dsc.setUsername("ddata");
+  dsc.setPassword("******");
+  mpg.setDataSource(dsc);
+```
+> 代码参考地址：[mybatis-plus-oracle](https://github.com/zhangbiy/basics_projects/tree/master/projects/mybatis-plus-oracle)
+
 
 ### SpringBoot 分页处理
 
