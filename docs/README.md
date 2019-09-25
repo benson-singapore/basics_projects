@@ -64,6 +64,8 @@
       - [4-添加数据信息](/tools/mybatisPlus/mybatisPlus?id=_4-添加数据信息)
       - [5-调用代码生成器](/tools/mybatisPlus/mybatisPlus?id=_5-调用代码生成器)
       - [6-增加dao扫描配置](/tools/mybatisPlus/mybatisPlus?id=_6-增加dao扫描配置)
+      - [7-示例代码](/tools/mybatisPlus/mybatisPlus?id=_7-示例代码)
+      - [8-mybatisplus-集成-oracle](/tools/mybatisPlus/mybatisPlus?id=_8-mybatisplus-集成-oracle)
     - [springboot-分页处理](/tools/mybatisPlus/mybatisPlus?id=springboot-分页处理)
     - [crud-接口](/tools/mybatisPlus/mybatisPlus?id=crud-接口)
     - [条件构造器](/tools/mybatisPlus/mybatisPlus?id=条件构造器)

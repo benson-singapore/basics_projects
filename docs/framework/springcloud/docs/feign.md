@@ -3,7 +3,7 @@
 
 ![](../images/spring.png ':size=130') <span style="position: relative; top: -10px;font-size:24px;font-weight: 600; color: #55b432;">FEIGN</span>
 
-#### 介绍
+#### 简介
 
 `Feign`是--个声明式的WebService客户端。它的出现使开发WebService客户端变得 很简单。使用Feign只需要创建一个接口加上对应的注解，比如: FeignClient 注解。Feign 有可插拔的注解，包括Feign 注解和JAX-RS注解。Feign也支持编码器和解码器，Spring Cloud Open Feign对Feign进行增强支持Spring MVC注解，可以像Spring Web-样使用 HttpMessageConverters等。
 

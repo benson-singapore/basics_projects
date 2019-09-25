@@ -3,6 +3,7 @@
 
 ![](../images/spring.png ':size=130') <span style="position: relative; top: -10px;font-size:24px;font-weight: 600; color: #55b432;">RIBBON</span>
 
+- [简介](/framework/springcloud/docs/ribbon?id=简介)
 - [构建maven父级pom文件](/framework/springcloud/docs/ribbon?id=构建maven父级pom文件)
 - [创建Eureka注册中心服务](/framework/springcloud/docs/ribbon?id=创建Eureka注册中心服务)
 - [创建服务工程client-one](/framework/springcloud/docs/ribbon?id=创建服务工程-client-one)
@@ -10,9 +11,13 @@
 - [启动测试](/framework/springcloud/docs/ribbon?id=启动测试)
 - [示例代码](/framework/springcloud/docs/ribbon?id=示例代码)
 
->`Spring Cloud Ribbon` 是一个基于 HTTP 和 TCP 的客户端负载均衡工具，它基于 Netflix Ribbon实现。 通过SpringCloud的封装，可以让我们轻松地将`面向服务`的REST模板请求,自动转换成`客户端负载均衡`的服务调用。
+#### 简介
 
-?> 此外，`Feign` 与`Zuul`中已经默认集成了Ribbon,在我们的服务之间凡是涉及调用的，都可以集成它并应用，从而使我们的调用链具备良好的伸缩性。
+`Spring Cloud Ribbon` 是一个基于 HTTP 和 TCP 的客户端负载均衡工具，它基于 Netflix Ribbon实现。 通过SpringCloud的封装，可以让我们轻松地将面向服务的REST模板请求,自动转换成客户端负载均衡的服务调用。 `Spring Cloud Ribbon` 虽然只是一个工具类框架， 它不像服务注册中心、 配置中心、 API 网关那样需要独立部署，但是它几乎存在于每一个 Spring Cloud 构建的微服务和基础设施中。 因为微服务间的调用，API 网关的请求转发等内容实际上都是通过Ribbon 来实现的，包括后续我们将要介绍的 Feign, 它也是基于 Ribbon 实现的工具。 所以，对SpringCloud Ribbon的理解和使用，对于我们使用SpringCloud来构建微服务非常重要。
+
+此外，`Feign` 与`Zuul`中已经默认集成了Ribbon,在我们的服务之间凡是涉及调用的，都可以集成它并应用，从而使我们的调用链具备良好的伸缩性。
+
+<h1>Ribbon 实战<h1>
 
 #### 构建maven父级pom文件
 
