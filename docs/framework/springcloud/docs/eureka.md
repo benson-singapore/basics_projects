@@ -99,4 +99,4 @@ public class SpringCloudEurekaApplication {
 
 #### 示例代码
 
-!> 代码参考地址：[spring-cloud-eureka](https://github.com/zhangbiy/basics_projects/tree/master/projects/springcloud/spring-cloud-eureka)
+!> 代码参考地址：[spring-cloud-eureka](https://gitlab.com/zhangbiyu/basics_project/tree/master/projects/springcloud/spring-cloud-eureka)

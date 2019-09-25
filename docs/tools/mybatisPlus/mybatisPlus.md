@@ -286,7 +286,7 @@ public class MybatisPlusSpringbootApplication {
 ```
 
 #### 7. 示例代码
-!> 代码参考地址：[mybatis-plus-springboot](https://github.com/zhangbiy/basics_projects/tree/master/projects/mybatis-plus-springboot)
+!> 代码参考地址：[mybatis-plus-springboot](https://gitlab.com/zhangbiyu/basics_project/tree/master/projects/mybatis-plus-springboot)
 
 #### 8. MyBatisPlus 集成 Oracle
 > MyBatisPlus 如何集成 Oracle，修改如上[MyBatisPlus集成springboot](/tools/mybatisPlus/mybatisPlus?id=_8-mybatisplus-如何集成-oracle)代码，增加oracle配置
@@ -317,7 +317,7 @@ spring.datasource.password= ******
   dsc.setPassword("******");
   mpg.setDataSource(dsc);
 ```
-> 代码参考地址：[mybatis-plus-oracle](https://github.com/zhangbiy/basics_projects/tree/master/projects/mybatis-plus-oracle)
+> 代码参考地址：[mybatis-plus-oracle](https://gitlab.com/zhangbiyu/basics_project/tree/master/projects/mybatis-plus-oracle)
 
 
 ### SpringBoot 分页处理

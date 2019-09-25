@@ -219,4 +219,4 @@ public class ClientController {
 
 #### 示例代码
 
-!> 代码参考地址：[spring-cloud-ribbon](https://github.com/zhangbiy/basics_projects/tree/master/projects/springcloud/spring-cloud-ribbon)
+!> 代码参考地址：[spring-cloud-ribbon](https://gitlab.com/zhangbiyu/basics_project/tree/master/projects/springcloud/spring-cloud-ribbon)
