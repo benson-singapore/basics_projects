@@ -6,6 +6,7 @@
     * [SpringCloud-简介](/framework/springcloud/springcloud?id=springcloud)
     * [SpringCloud-Eureka](/framework/springcloud/docs/eureka)
     * [SpringCloud-Ribbon](/framework/springcloud/docs/ribbon)
+    * [SpringCloud-Feign](/framework/springcloud/docs/feign)
   * [Utils 工具类](/framework/util/util)
 * **工具**
   * [Docker](/tools/docker/dockerMaven)

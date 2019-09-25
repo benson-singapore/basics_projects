@@ -209,7 +209,7 @@ public class ClientController {
 
 ?> 先启动注册中心 `eureka`，然后分别启动`client-service-one`、`client-service-two`。<br><br>
 启动成功后访问：[http://localhost:8761](http://localhost:8761)，会发现注册中心两个服务都已经注册成功。<br><br>
-![](./images/WX20190924-145520.png)<br><br>
+![](../images/WX20190924-145520.png)<br><br>
 测试调用ribbon服务，可以直接调用到client-one：http://localhost:8081/test
 
 #### 示例代码

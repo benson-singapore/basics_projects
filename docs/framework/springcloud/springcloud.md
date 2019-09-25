@@ -6,6 +6,7 @@
 - [springcloud-简介](/framework/springcloud/springcloud?id=springcloud)
 - [springcloud-eureka](/framework/springcloud/docs/eureka)
 - [springcloud-ribbon](/framework/springcloud/docs/ribbon)
+- [springcloud-feign](/framework/springcloud/docs/feign)
 
 ##### SpringCloud-简介
 
@@ -13,13 +14,13 @@ SpringCloud是一个基千SpringBoot实现的微服务架构开发 工具。 它
 
 |  组件名称   | 所属项目  | 组件分类  |
 |  :----:  | :----:  | :----:  |
-|  [Eureka](/framework/springcloud/springcloud?id=springcloud-eureka)  | spring-cloud-netflix  | 注册中心  |
+|  [Eureka](/framework/springcloud/docs/eureka)  | spring-cloud-netflix  | 注册中心  |
 |  zuul  | spring-cloud-netflix  | 第一代网关  |
 |  Sidecar  | spring-cloud-netflix  | 多语言  |
-|  [Ribbon](/framework/springcloud/springcloud?id=springcloud-ribbon)  | spring-cloud-netflix  | 负载均衡  |
+|  [Ribbon](/framework/springcloud/docs/ribbon)  | spring-cloud-netflix  | 负载均衡  |
 |  Hystrix  | spring-cloud-netflix  | 熔断器  |
 |  Turbine  | spring-cloud-netflix  | 集群监控  |
-|  Feign  | spring-cloud-openfeign  | 声明式HTTP客户端  |
+|  [Feign](/framework/springcloud/docs/feign)  | spring-cloud-openfeign  | 声明式HTTP客户端  |
 |  Consul  | spring-cloud-consul  | 注册中心  |
 |  Gateway  | spring-cloud-gatewayl  | 第二代网关  |
 |  Sleuth  | spring-cloud-seluth  | 链路追踪  |

@@ -12,12 +12,26 @@
     table th {
       width: 50vw;
     }
+
+    .pagination-item-title {
+      font-size: 1.6em;
+      color: #42b983;
+    }
+
+    .pagination-item-label {
+      font-size: .8em;
+      color: #4CAF50;
+    }
   </style>
 </head>
 
 <body>
   <div id="app">加载中...</div>
   <script>
+    //增加离线功能
+    if (typeof navigator.serviceWorker !== 'undefined') {
+      navigator.serviceWorker.register('sw.js')
+    }
     window.$docsify = {
       name: 'Basics Projects',
       nameLink: '#/README?id=top',

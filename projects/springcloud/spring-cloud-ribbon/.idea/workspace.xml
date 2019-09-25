@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f483f931-f79c-45b0-8472-40968cb602ce" name="Default Changelist" comment="" />
+    <list default="true" id="f483f931-f79c-45b0-8472-40968cb602ce" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../docs/framework/springcloud/docs/ribbon.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../docs/framework/springcloud/docs/ribbon.md" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +99,7 @@
       <option name="presentableId" value="Default" />
       <updated>1569304140963</updated>
       <workItem from="1569304144590" duration="23000" />
-      <workItem from="1569304188466" duration="3179000" />
+      <workItem from="1569304188466" duration="5273000" />
     </task>
     <servers />
   </component>
