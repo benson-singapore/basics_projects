@@ -285,6 +285,10 @@ public class MybatisPlusSpringbootApplication {
 
 !> 代码参考地址：[mybatis-plus-springboot](https://github.com/zhangbiy/basics_projects/tree/master/projects/mybatis-plus-springboot)
 
+> MyBatisPlus 如何集成 Oracle
+``` yaml
+spring
+```
 
 ### SpringBoot 分页处理
 

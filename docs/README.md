@@ -27,6 +27,7 @@
     - [springcloud-ribbon](/framework/springcloud/docs/ribbon)
   - [Utils 工具类](/framework/util/util)
     - [springboot-邮件发送](/framework/util/util?id=springboot-邮件发送)
+    - [邮件延时发送](/framework/util/util?id=邮件延时发送)
     - [spring容器中获取静态对象](/framework/util/util?id=spring容器中获取静态对象)
     - [获取setting-公共配置文件](/framework/util/util?id=获取setting-公共配置文件)
     - [commonutil-公共通用方法](/framework/util/util?id=commonutil-公共通用方法)

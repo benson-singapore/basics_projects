@@ -3,6 +3,7 @@
 > 日常封装用到的工具类
 
 - [springboot-邮件发送](/framework/util/util?id=springboot-邮件发送)
+- [邮件延时发送](/framework/util/util?id=邮件延时发送)
 - [spring容器中获取静态对象](/framework/util/util?id=spring容器中获取静态对象)
 - [获取setting-公共配置文件](/framework/util/util?id=获取setting-公共配置文件)
 - [commonutil-公共通用方法](/framework/util/util?id=commonutil-公共通用方法)
@@ -89,6 +90,91 @@ public class EmailUtil {
     }
 }
 ```
+
+## 邮件延时发送
+
+!> 当项目中加入系统异常邮件推送机制时，可能会遇到同一时刻某个特定的异常，导致邮件大量的集中推送，为避免邮箱被大量垃圾邮件堆积。此处加入邮件延时发送配置，可根据用户配置的邮件发送,间隔时间才可正常推送。具体方式，修改如上[邮件推送](/framework/util/util?id=springboot-邮件发送)代码。加入邮件延时推送方法
+
+##### 增加系统延时推送配置
+
+``` yaml
+spring:
+  mail:
+    # 延时发送单位默认分钟
+    delaySend: 10
+```
+
+##### 代码修改
+
+``` java
+###### 配置文件读取配置修改 ########
+/**
+ * 邮件配置
+ *
+ * @author zhangby
+ * @date 5/9/19 2:35 pm
+ */
+@Component
+@ConfigurationProperties(prefix = "spring.mail")
+@Data
+public class EmailConfig {
+    private Integer delaySend;
+    private String from;
+    private List<String> to;
+}
+
+###### 邮件发送修改 ########
+
+ /**
+  * 设置延迟推送
+  */
+private static Map<String, Date> delaySendMap = Maps.newConcurrentMap();
+
+/**
+ * 延时发送，避免同一个异常集中发送邮件，造成大量垃圾邮件
+ * @param key 阻塞邮件标识
+ */
+public static void delaySend(String title, String content,String key) {
+    //获取指定标识，最新邮件发送时间
+    Date date = Optional.ofNullable(delaySendMap)
+            .map(delayMap -> delayMap.get(key))
+            .orElse(null);
+    //第一次发送
+    if (date == null) {
+        //支持发送
+        send(title,content);
+        //更新时间
+        delaySendMap.put(key, new Date());
+    } else {
+        //验证是否到达指定发送时间
+        Date delayTime = DateUtil.offsetMinute(date, emailConfig.getDelaySend());
+        if (delayTime.before(new Date())) {
+            //支持发送
+            send(title,content);
+            delaySendMap.put(key, new Date());
+        }
+    }
+}
+```
+
+##### 测试邮件发送
+
+``` java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class GraspSpringApplicationTests {
+
+    @Test
+    public void contextLoads() {
+        for (int i : NumberUtil.range(1, 10)) {
+            EmailUtil.delaySend("测试延时推送","测试延时推送","测试");
+        }
+    }
+
+}
+```
+
+?> 此时配置的时间间隔是10分钟，在10分钟内发的所有邮件只有一封可以送达。
 
 ## Spring容器中获取静态对象
 
