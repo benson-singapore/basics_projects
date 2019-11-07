@@ -277,6 +277,33 @@ public class MyBaseExceptionHandler {
     }
 
     /**
+     * 自定义参数异常拦截
+     */
+    @ExceptionHandler(value = { MethodArgumentNotValidException.class, BindException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResultPoJo validException(HttpServletRequest request, Exception ex) {
+        List<ObjectError> errors = Lists.newArrayList();
+        if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException c = (MethodArgumentNotValidException) ex;
+            errors =c.getBindingResult().getAllErrors();
+        }
+        if (ex instanceof BindException) {
+            BindException c = (BindException) ex;
+            errors =c.getBindingResult().getAllErrors();
+        }
+        StringJoiner stringJoiner = new StringJoiner(" , ", "{ ", " }");
+        errors.forEach(error -> {
+            List<String> rs = Stream.of(error.toString().split(";"))
+                    .filter(mg -> mg.contains("default message"))
+                    .map(mg -> Stream.of(mg.split(",")).filter(s -> s.contains("default message")).findFirst().orElse(""))
+                    .collect(Collectors.toList());
+            List<String> list = CommonUtil.splitStr4Temp(String.join("",rs), "default message [{}]");
+            stringJoiner.add("[" + list.get(0) + "]" + list.get(1));
+        });
+        return ResultPoJo.create().code(HttpStatus.BAD_REQUEST.value() + "").msg("参数异常："+ stringJoiner.toString());
+    }
+
+    /**
      * 捕获其他异常
      *
      * @param exception exception
@@ -290,24 +317,58 @@ public class MyBaseExceptionHandler {
         String msg = "服务错误，请稍后重试！";
         Class exceptionClazz = exception.getClass();
         if (Objects.equals(MissingServletRequestParameterException.class, exceptionClazz)) {
-            msg = "Missing parameters!";
-            httpStatus = HttpStatus.OK;
+            msg = "缺少参数!";
+            httpStatus = HttpStatus.BAD_REQUEST;
         } else if (Objects.equals(HttpRequestMethodNotSupportedException.class, exceptionClazz)) {
-            httpStatus = HttpStatus.OK;
+            httpStatus = HttpStatus.BAD_REQUEST;
             msg = exception.getMessage();
-        } else if ("org.springframework.security.access.AccessDeniedException: 不允许访问".equals(exception.toString())) {
-            httpStatus = HttpStatus.OK;
-            msg = "insufficient permissions, access failed";
+        } else if ("AccessDeniedException: 不允许访问".equals(ExceptionUtil.getMessage(exception))) {
+            msg = "不允许访问!";
+            httpStatus = HttpStatus.UNAUTHORIZED;
         } else {
-            httpStatus = HttpStatus.OK;
-            msg = "Service error, please try again later!";
+            msg = "服务错误，请稍后重试！（" + exception.getMessage() + "）";
         }
+
         return new ResponseEntity(
-                ResultPoJo.create().code("999").msg(msg),
+                ResultPoJo.create().code("" + httpStatus.value()).msg(msg),
                 httpStatus);
     }
 
+    /**
+     * 加载错误信息
+     * @return
+     */
+    public static String loadErrorMsg(String num, Object... msg) {
+        //获取错误码配置信息 , hutool 工具读配置文件
+        Setting errorSetting = new Setting("error.setting");
+        //获取错误码
+        String errMsg = errorSetting.get(StrUtil.format("code_{}", num));
+        if (ObjectUtil.isNotNull(msg)) {
+            errMsg = StrUtil.format(errMsg, msg);
+        }
+        return errMsg;
+    }
+
 }
+```
+
+- 异常信息统一管理
+
+``` Setting
+# -------------------------------------------------------------
+# ----- Setting File with UTF8 -----
+# ----- 错误信息code码 -----
+# -------------------------------------------------------------
+
+# 错误代码
+#code_999为自定义异常
+code_999={}
+code_998=登录超时
+code_997=系统异常请稍后重试
+
+code_401=非授权访问，无效的token
+code_402=token 已过期
+code_403=权限不足，访问失败
 ```
 
 - 调用时抛出异常，默认会自动拦截
@@ -315,6 +376,139 @@ public class MyBaseExceptionHandler {
 ``` java
 throw new MyBaselogicException("999", "系统异常");
 ```
+
+## SpringBoot 参数验证框架
+> 在spring-boot-starter-web包里面有hibernate-validator包，它提供了一系列验证各种参数的方法
+
+- javaBean
+
+``` java
+@Data
+public class Validate {
+
+    // 空和非空检查: @Null、@NotNull、@NotBlank、@NotEmpty
+
+    @Null(message = "验证是否为 null")
+    private Integer isNull;
+
+    @NotNull(message = "验证是否不为 null, 但无法查检长度为0的空字符串")
+    private Integer id;
+
+    @NotBlank(message = "检查字符串是不是为 null，以及去除空格后长度是否大于0")
+    private String name;
+
+    @NotEmpty(message = "检查是否为 NULL 或者是 EMPTY")
+    private List<String> stringList;
+
+    // Boolean值检查: @AssertTrue、@AssertFalse
+
+    @AssertTrue(message = " 验证 Boolean参数是否为 true")
+    private Boolean isTrue;
+
+    @AssertFalse(message = "验证 Boolean 参数是否为 false ")
+    private Boolean isFalse;
+
+    // 长度检查: @Size、@Length
+
+    @Size(min = 1, max = 2, message = "验证（Array,Collection,Map,String）长度是否在给定范围内")
+    private List<Integer> integerList;
+
+    @Length(min = 8, max = 30, message = "验证字符串长度是否在给定范围内")
+    private String address;
+
+    // 日期检查: @Future、@FutureOrPresent、@Past、@PastOrPresent
+
+    @Future(message = "验证日期是否在当前时间之后")
+    private Date futureDate;
+
+    @FutureOrPresent(message = "验证日期是否为当前时间或之后")
+    private Date futureOrPresentDate;
+
+    @Past(message = "验证日期是否在当前时间之前")
+    private Date pastDate;
+
+    @PastOrPresent(message = "验证日期是否为当前时间或之前")
+    private Date pastOrPresentDate;
+
+    // 其它检查: @Email、@CreditCardNumber、@URL、@Pattern、@ScriptAssert、@UniqueElements
+
+    @Email(message = "校验是否为正确的邮箱格式")
+    private String email;
+
+    @CreditCardNumber(message = "校验是否为正确的信用卡号")
+    private String creditCardNumber;
+
+    @URL(protocol = "http", host = "127.0.0.1", port = 8080, message = "校验是否为正确的URL地址")
+    private String url;
+
+    @Pattern(regexp = "^1[3|4|5|7|8][0-9]{9}$", message = "正则校验是否为正确的手机号")
+    private String phone;
+
+    // 对关联对象元素进行递归校验检查
+
+    @Valid
+    @UniqueElements(message = "校验集合中的元素是否唯一")
+    private List<CalendarEvent> calendarEvent;
+
+    @Data
+    @ScriptAssert(lang = "javascript", script = "_this.startDate.before(_this.endDate)",
+            message = "通过脚本表达式校验参数")
+    private class CalendarEvent {
+
+        private Date startDate;
+
+        private Date endDate;
+
+    }
+
+    // 数值检查: @Min、@Max、@Range、@DecimalMin、@DecimalMax、@Digits
+
+    @Min(value = 0, message = "验证数值是否大于等于指定值")
+    @Max(value = 100, message = "验证数值是否小于等于指定值")
+    @Range(min = 0, max = 100, message = "验证数值是否在指定值区间范围内")
+    private Integer score;
+
+    @DecimalMin(value = "10.01", inclusive = false, message = "验证数值是否大于等于指定值")
+    @DecimalMax(value = "199.99", message = "验证数值是否小于等于指定值")
+    @Digits(integer = 3, fraction = 2, message = "限制整数位最多为3，小数位最多为2")
+    private BigDecimal money;
+
+}
+```
+
+- controller 开启验证（增加 @Valid 参数注解）
+
+```  java
+/**
+ * Valid注解标明要对参数对象进行数据校验
+ */
+@PutMapping
+@PostMapping
+public Map<String, Object> test01(@RequestBody @Valid Validate validate) {
+    Map<String, Object> map = new HashMap<>(4);
+    ....
+    return map;
+}
+```
+
+- 附件
+
+|  组件名称   | 组件分类  |
+|  :---- | :----  |
+|@Null |被注释的元素必须为 null |
+|@NotNull|被注释的元素必须不为 null|
+|@AssertTrue| 	被注释的元素必须为 true|
+|@AssertFalse| 	被注释的元素必须为 false|
+|@Min(value)| 	被注释的元素必须是一个数字，其值必须大于等于指定的最小值|
+|@Max(value)|	被注释的元素必须是一个数字，其值必须小于等于指定的最大值|
+|@DecimalMin(value)| 	被注释的元素必须是一个数字，其值必须大于等于指定的最小值|
+|@DecimalMax(value)|  	被注释的元素必须是一个数字，其值必须小于等于指定的最大值|
+|@Size(max, min)| 	被注释的元素的大小必须在指定的范围内|
+|@Digits (integer, fraction)|	 被注释的元素必须是一个数字，其值必须在可接受的范围内|
+|@Past|被注释的元素必须是一个过去的日期|
+|@Future| 	被注释的元素必须是一个将来的日期|
+|@Pattern(value)|	被注释的元素必须符合指定的正则表达式|
+
 
 ## SpringBoot 多线程定时任务
 > SpringBoot 内置了定时任务的功能，集成了Corn可以简单方便的去调用。<br> 定时任务 [corn表达式](http://cron.qqe2.com/)
