@@ -968,3 +968,276 @@ public class LogReceiver {
 
 !> 具体如果使用日志追踪还需要根据业务来，我这里有一套追踪机制是：<br>
   系统出异常捕获，然后发送邮件到指定邮箱并带上`tracerId`，之后系统维护人员可根据`tracerId`定位到日志请求过程中所有的日志情况，然后处理。
+
+## SpringBoot 集成WebSocket
+
+> 摘自[SpringBoot2.0集成WebSocket，实现后台向前端推送信息](https://blog.csdn.net/moshowgame/article/details/80275084)
+
+##### 什么是WebSocket?
+
+![](./images/webscoket01.png ':size=400px')
+
+WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。
+
+##### 为什么需要 WebSocket？
+
+初次接触 WebSocket 的人，都会问同样的问题：我们已经有了 HTTP 协议，为什么还需要另一个协议？它能带来什么好处？
+
+- 答案很简单，因为 HTTP 协议有一个缺陷：通信只能由客户端发起，HTTP 协议做不到服务器主动向客户端推送信息。
+
+![](./images/webscoket02.png ':size=500px')
+
+举例来说，我们想要查询当前的排队情况，只能是页面轮询向服务器发出请求，服务器返回查询结果。轮询的效率低，非常浪费资源（因为必须不停连接，或者 HTTP 连接始终打开）。因此WebSocket 就是这样发明的。
+
+话不多说，马上进入干货时刻。
+
+##### maven依赖
+
+SpringBoot2.0对WebSocket的支持简直太棒了，直接就有包可以引入
+
+``` xml
+<dependency>  
+   <groupId>org.springframework.boot</groupId>  
+   <artifactId>spring-boot-starter-websocket</artifactId>  
+</dependency>
+```
+
+##### WebSocketConfig
+
+启用WebSocket的支持也是很简单，几句代码搞定
+
+``` java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+
+/**
+ * 开启WebSocket支持
+ * @author zhengkai
+ */
+@Configuration  
+public class WebSocketConfig {  
+
+    @Bean  
+    public ServerEndpointExporter serverEndpointExporter() {  
+        return new ServerEndpointExporter();  
+    }  
+
+}
+```
+
+##### WebSocketServer
+
+因为WebSocket是类似客户端服务端的形式(采用ws协议)，那么这里的WebSocketServer其实就相当于一个ws协议的Controller直接@ServerEndpoint("/websocket")@Component启用即可，然后在里面实现@OnOpen,@onClose,@onMessage等方法
+
+``` java
+import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+import org.springframework.stereotype.Component;
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
+import lombok.extern.slf4j.Slf4j;
+
+
+@ServerEndpoint("/websocket/{sid}")
+@Component
+public class WebSocketServer {
+
+	static Log log=LogFactory.get(WebSocketServer.class);
+    //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
+    private static int onlineCount = 0;
+    //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+    private static CopyOnWriteArraySet<WebSocketServer> webSocketSet = new CopyOnWriteArraySet<WebSocketServer>();
+
+    //与某个客户端的连接会话，需要通过它来给客户端发送数据
+    private Session session;
+
+    //接收sid
+    private String sid="";
+    /**
+     * 连接建立成功调用的方法*/
+    @OnOpen
+    public void onOpen(Session session,@PathParam("sid") String sid) {
+        this.session = session;
+        webSocketSet.add(this);     //加入set中
+        addOnlineCount();           //在线数加1
+        log.info("有新窗口开始监听:"+sid+",当前在线人数为" + getOnlineCount());
+        this.sid=sid;
+        try {
+        	 sendMessage("连接成功");
+        } catch (IOException e) {
+            log.error("websocket IO异常");
+        }
+    }
+
+    /**
+     * 连接关闭调用的方法
+     */
+    @OnClose
+    public void onClose() {
+        webSocketSet.remove(this);  //从set中删除
+        subOnlineCount();           //在线数减1
+        log.info("有一连接关闭！当前在线人数为" + getOnlineCount());
+    }
+
+    /**
+     * 收到客户端消息后调用的方法
+     *
+     * @param message 客户端发送过来的消息*/
+    @OnMessage
+    public void onMessage(String message, Session session) {
+    	log.info("收到来自窗口"+sid+"的信息:"+message);
+        //群发消息
+        for (WebSocketServer item : webSocketSet) {
+            try {
+                item.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+	/**
+	 *
+	 * @param session
+	 * @param error
+	 */
+    @OnError
+    public void onError(Session session, Throwable error) {
+        log.error("发生错误");
+        error.printStackTrace();
+    }
+	/**
+	 * 实现服务器主动推送
+	 */
+    public void sendMessage(String message) throws IOException {
+        this.session.getBasicRemote().sendText(message);
+    }
+
+
+    /**
+     * 群发自定义消息
+     * */
+    public static void sendInfo(String message,@PathParam("sid") String sid) throws IOException {
+    	log.info("推送消息到窗口"+sid+"，推送内容:"+message);
+        for (WebSocketServer item : webSocketSet) {
+            try {
+            	//这里可以设定只推送给这个sid的，为null则全部推送
+            	if(sid==null) {
+            		item.sendMessage(message);
+            	}else if(item.sid.equals(sid)){
+            		item.sendMessage(message);
+            	}
+            } catch (IOException e) {
+                continue;
+            }
+        }
+    }
+
+    public static synchronized int getOnlineCount() {
+        return onlineCount;
+    }
+
+    public static synchronized void addOnlineCount() {
+        WebSocketServer.onlineCount++;
+    }
+
+    public static synchronized void subOnlineCount() {
+        WebSocketServer.onlineCount--;
+    }
+}
+```
+##### 消息推送
+
+至于推送新信息，可以再自己的Controller写个方法调用WebSocketServer.sendInfo();即可
+
+``` java
+@Controller
+@RequestMapping("/checkcenter")
+public class CheckCenterController {
+
+	//页面请求
+	@GetMapping("/socket/{cid}")
+	public ModelAndView socket(@PathVariable String cid) {
+		ModelAndView mav=new ModelAndView("/socket");
+		mav.addObject("cid", cid);
+		return mav;
+	}
+	//推送数据接口
+	@ResponseBody
+	@RequestMapping("/socket/push/{cid}")
+	public ApiReturnObject pushToWeb(@PathVariable String cid,String message) {  
+		try {
+			WebSocketServer.sendInfo(message,cid);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ApiReturnUtil.error(cid+"#"+e.getMessage());
+		}  
+		return ApiReturnUtil.success(cid);
+	}
+}
+```
+
+##### 页面发起socket请求
+
+然后在页面用js代码调用socket，当然，太古老的浏览器是不行的，一般新的浏览器或者谷歌浏览器是没问题的。还有一点，记得协议是ws的哦，如果像我这样封装了一些basePath的路径类，可以replace(“http”,“ws”)来替换协议
+
+``` js
+<script>
+    var socket;  
+    if(typeof(WebSocket) == "undefined") {  
+        console.log("您的浏览器不支持WebSocket");  
+    }else{  
+        console.log("您的浏览器支持WebSocket");  
+        	//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接  
+            //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");  
+            socket = new WebSocket("${basePath}websocket/${cid}".replace("http","ws"));  
+            //打开事件  
+            socket.onopen = function() {  
+                console.log("Socket 已打开");  
+                //socket.send("这是来自客户端的消息" + location.href + new Date());  
+            };  
+            //获得消息事件  
+            socket.onmessage = function(msg) {  
+                console.log(msg.data);  
+                //发现消息进入    开始处理前端触发逻辑
+            };  
+            //关闭事件  
+            socket.onclose = function() {  
+                console.log("Socket已关闭");  
+            };  
+            //发生了错误事件  
+            socket.onerror = function() {  
+                alert("Socket发生了错误");  
+                //此时可以尝试刷新页面
+            }  
+            //离开页面时，关闭socket
+            //jquery1.8中已经被废弃，3.0中已经移除
+            // $(window).unload(function(){  
+            //     socket.close();  
+            //});  
+    }
+</script>
+```
+
+##### 运行效果
+
+v1.1的效果，刚刚修复了日志，并且支持指定监听某个端口，代码已经全部更新，现在是这样的效果
+
+- 打开两个页面：<br>
+  [http://localhost:8083/checkcentersys/checkcenter/socket/20](http://localhost:8083/checkcentersys/checkcenter/socket/20)
+  [http://localhost:8083/checkcentersys/checkcenter/socket/22](http://localhost:8083/checkcentersys/checkcenter/socket/22)
+- 向前端推送数据：<br>
+  [http://localhost:8083/checkcentersys/checkcenter/socket/push/20?message=cccccccccc](http://localhost:8083/checkcentersys/checkcenter/socket/push/20?message=cccccccccc)
+  [http://localhost:8083/checkcentersys/checkcenter/socket/push/22?message=xxxxx123xxxx](http://localhost:8083/checkcentersys/checkcenter/socket/push/22?message=xxxxx123xxxx)
+
+![](./images/webscoket03.jpeg ':size=800px')
+
+![](./images/webscoket04.jpeg ':size=800px')

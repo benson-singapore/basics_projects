@@ -17,6 +17,7 @@
     - [springboot-读取系统配置文件](/framework/springboot/springboot?id=springboot-读取系统配置文件)
     - [springboot-自定义日志](/framework/springboot/springboot?id=springboot-自定义日志)
     - [springboot-自定义异常拦截](/framework/springboot/springboot?id=springboot-自定义异常拦截)
+    - [springboot-参数验证框架](/framework/springboot/springboot?id=springboot-参数验证框架)
     - [springboot-多线程定时任务](/framework/springboot/springboot?id=springboot-多线程定时任务)
     - [springboot-redis配置](/framework/springboot/springboot?id=springboot-redis配置)
     - [springboot-rabbitmq配置](/framework/springboot/springboot?id=springboot-rabbitmq配置)
