@@ -1241,3 +1241,175 @@ v1.1的效果，刚刚修复了日志，并且支持指定监听某个端口，�
 ![](./images/webscoket03.jpeg ':size=800px')
 
 ![](./images/webscoket04.jpeg ':size=800px')
+
+## SpringBoot 整合 JPA
+
+在越来越多的项目中开始引用jpa作为数据库查询的工具，相比于hibernate，jpa更简洁。但对于复杂的查询则又不得不选择用mybatis。在取舍之间我也是一直对jpa有一种排斥的心里。
+
+毕竟用了好多年的 `mybatis-plus`,可以说工作中的所有查询，不管单表多表复杂查询，多数据源切换都可以胜任。所以也就懒得去研究，近期发现身边越来越多的人推荐JPA所以也打算研究一下，并做了一个整合。
+
+- **引入maven**
+
+``` xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
+- **修改配置文件**
+
+``` yaml
+spring:
+  application:
+    name: spring-jpa
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://****:3306/spring-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2b8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: 123456
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+```
+
+> `ddl-auto: update`：在启动项目时如果数据库没有表会默认创建，以后只做更新操作。
+
+- **增加entity**
+``` java
+/**
+ * 用户信息表
+ *
+ * @author zhangby
+ * @date 2/12/19 10:14 am
+ */
+@Data
+@Entity
+public class User {
+    @Id
+    private String id;
+
+    private String username;
+    private String password;
+
+    private String delFlag;
+}
+```
+
+- **继承JPA查询功能**
+
+``` java
+/**
+ * User Dao 接口
+ */
+@Component
+public interface UserDao extends JpaRepository<User,String> {
+
+}
+```
+
+- **添加service**
+
+``` java
+// 接口
+public interface IUserService {
+    List<User> getUserList();
+    User getUserById(String id);
+    void saveUser(User user);
+    void deleteUser(String id);
+}
+
+// 实现
+@Service
+public class UserServiceImpl implements IUserService {
+    @Autowired
+    UserDao userDao;
+
+    @Override
+    public List<User> getUserList() {
+        return userDao.findAll();
+    }
+
+    @Override
+    public User getUserById(String id) {
+        return userDao.findById(id).orElse(null);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        userDao.save(user);
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        userDao.deleteById(id);
+    }
+}
+```
+
+- **添加Controller**
+
+``` java
+/**
+ * 用户管理
+ *
+ * @author zhangby
+ * @date 2/12/19 10:26 am
+ */
+@RestController
+@RequestMapping("/sys/user")
+public class UserController {
+
+    @Autowired
+    private IUserService userService;
+
+
+    @GetMapping("/list")
+    public List<User> getList() {
+        return userService.getUserList();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable String id) {
+        return userService.getUserById(id);
+    }
+
+    @PostMapping("")
+    public String saveUser(@RequestBody User user) {
+        user.setId(UUID.randomUUID().toString());
+        user.setDelFlag("0");
+        userService.saveUser(user);
+        return "success";
+    }
+
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable String id, @RequestBody User user) {
+        user.setId(id);
+        userService.saveUser(user);
+        return "success";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable String id) {
+        userService.deleteUser(id);
+        return "success";
+    }
+}
+```

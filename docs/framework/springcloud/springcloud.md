@@ -32,3 +32,5 @@ SpringCloud是一个基千SpringBoot实现的微服务架构开发 工具。 它
 ##### 示例代码
 
 !> 代码参考地址：[spring-cloud](https://gitlab.com/zhangbiyu/basics_project/tree/master/projects/springcloud)
+
+?> 转载springcloud: [SpringCloud 总结](/framework/springcloud/docs/simpread-springcloud)

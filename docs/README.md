@@ -22,6 +22,8 @@
     - [springboot-redis配置](/framework/springboot/springboot?id=springboot-redis配置)
     - [springboot-rabbitmq配置](/framework/springboot/springboot?id=springboot-rabbitmq配置)
     - [springboot-日志追踪](/framework/springboot/springboot?id=springboot-日志追踪)
+    - [springboot-集成websocket](/framework/springboot/springboot?id=springboot-集成websocket)
+    - [springboot-整合-jpa](/framework/springboot/springboot?id=springboot-整合-jpa)
   - [SpringCloud](/framework/springcloud/springcloud)
     - [springcloud-简介](/framework/springcloud/springcloud?id=springcloud)
     - [springcloud-eureka](/framework/springcloud/docs/eureka)
